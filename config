@@ -6,8 +6,9 @@ Month=1
 Day=0
 
 #Parameter Configuration
-#Format: Name;Type(INT/FLT/ENUM);Range(int for INT, float for FLT, [a,b,c] for ENUM);IncreaseRate
+#Format: Name;Type(FLT/ENUM);Range([startValue,EndValue] for FLT, [a,b,c] for ENUM);
+#		 IncreaseRate([startValue,EndValue] for FLT, null for ENUM)
 
 Parameter:
-财政收入;FLT;1000;0.05
+财政收入;FLT;[1000,1100];[0.05,0.1]
 乡镇;ENUM;[新区,双桥镇]

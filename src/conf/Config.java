@@ -67,7 +67,7 @@ public class Config {
 					p.setName(spliter[0]);
 					p.setType(spliter[1]);
 					p.setRange(spliter[2]);
-					if(!p.type.equals("ENUM"))p.setIncreaseRate(Double.valueOf(spliter[3]));
+					if(!p.type.equals("ENUM"))p.setIncreaseRate(spliter[3]);
 					parameters.add(p);
 					if ( p.type.equals("ENUM") ) enumPara.add(p);
 					else if ( p.type.equals("FLT") ) floatPara.add(p);

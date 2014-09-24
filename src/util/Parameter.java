@@ -5,13 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 
 public class Parameter {
+	
+	public static long SEED = 1234556789;
 	
 	public String name;
 	public String type;
 	public double lowerBound;
-	public double increaseRate;
+	public double upperBound;
+	public double lowerIncreaseRate;
+	public double upperIncreaseRate;
 	public List range;
 	public int index = -1;
 	public double nowValue = -1;
@@ -26,7 +31,10 @@ public class Parameter {
 	
 	public void setRange(String format){
 		if (this.type.equals("FLT")){
-			this.lowerBound = Double.valueOf(format);
+			String org = format.substring(1, format.length()-1);
+			String[] item = org.split(",");
+			this.lowerBound = Double.valueOf(item[0]);
+			this.upperBound = Double.valueOf(item[1]);
 			return;
 		}
 		if (this.type.equals("ENUM")){
@@ -37,8 +45,14 @@ public class Parameter {
 		}
 	}
 	
-	public void setIncreaseRate(double iRate){
-		this.increaseRate = iRate;
+	public void setIncreaseRate(String format){
+		if (this.type.equals("FLT")){
+			String org = format.substring(1, format.length()-1);
+			String[] item = org.split(",");
+			this.lowerIncreaseRate = Double.valueOf(item[0]);
+			this.upperIncreaseRate = Double.valueOf(item[1]);
+			return;
+		}
 	}
 	
 	public void rewind(){
@@ -53,8 +67,18 @@ public class Parameter {
 	public Map nextVale(){
 		Map result = new HashMap();
 		if (this.type.equals("FLT")){
-			if ( nowValue == -1 ) nowValue = lowerBound;
-			else nowValue = nowValue*(1+increaseRate);
+			if ( nowValue == -1 ) {
+				Random r = new Random();
+//				r.setSeed(SEED);
+				double randomBound = lowerBound + r.nextDouble()*(upperBound-lowerBound);
+				nowValue = randomBound;
+			}
+			else {
+				Random r = new Random();
+//				r.setSeed(SEED);
+				double randomIRate = lowerIncreaseRate + r.nextDouble()*(upperIncreaseRate-lowerIncreaseRate);
+				nowValue = nowValue*(1+randomIRate);
+			}
 			result.put(name,nowValue);
 		}
 		else if (this.type.equals("ENUM")){
